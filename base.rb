@@ -6,8 +6,6 @@
 #   Here is a list in short:
 #   
 #   GEMS
-#   - Removes the README and creates a README.textile
-#   - Removes the index.html from the public folder
 #   - Updates RubyGems and all the already installed gems
 #   - RSpec: Set gem dependencies, installs gems, generate the Spec folder and files
 #   - Factory Girl: Sets gem dependency, installs gem, creates the factories file in the spec/ folder
@@ -34,7 +32,9 @@
 #   - Creates
 #   - Migrates
 #
-#   FILE WRITING
+#   FILES
+#   - Removes the README
+#   - Removes the index.html from the public folder
 #   - Adds configuration for Action Mailer Optional TLS to config/environment.rb,
 #     config/environments/development.rb and config/environments/produtcion.rb
 #     so Gmail can be used with Action Mailer.
@@ -43,6 +43,7 @@
 #   - Creates a .gitignore file containing essential file ignoration
 #   - Initializes a new Git Repository
 #   - Does an initial commit
+
 
 # == Configuration ==============================
 
@@ -77,6 +78,7 @@ else
     options[:friendly_id] = true
   end
 end
+
 
 # == Helper Methods ==============================
 
@@ -134,9 +136,6 @@ open('config/environment.rb', 'a') do |file|
   file << "\n\nExceptionNotifier.exception_recipients = %w(mail@some.random.domain.com mail2@some.random.domain.com)"
   file << "\n# Don't forget to add this inside the ApplicationController:\n# include ExceptionNotifiable"
 end
-
-# Create TEXTILE README file
-run "touch README.textile"
 
 # Load modules
 load_module("git")
