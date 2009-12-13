@@ -11,3 +11,5 @@ run "sudo rm -f config/deploy.rb"
 inside('config') do
   download_file('deploy.rb')
 end
+
+commit "Install Capistrano, Initialized Capistrano, Replaced default deploy.rb with custom deploy.rb."

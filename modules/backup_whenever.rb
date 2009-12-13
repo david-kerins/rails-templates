@@ -13,3 +13,5 @@ generate("backup")
 
 # Initialize Whenever
 run "sudo wheneverize ."
+
+commit "Added Authlogic and Backup Gem Dependencies. Generated Backup and Initialized Whenever."

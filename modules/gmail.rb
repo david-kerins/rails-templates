@@ -26,3 +26,5 @@ end
 open('config/environments/production.rb', 'a') do |file|
   file << "\n\nconfig.action_mailer.default_url_options = { :host => 'domain.com' }"
 end
+
+commit "Installed action_mailer_optional_tls plugin. Setup default configuration in the environment files."

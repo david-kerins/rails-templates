@@ -5,3 +5,5 @@ run "sudo gem install hirb"
 open('config/environments/development.rb', 'a') do |file|
   file << "\n\nrequire 'hirb'\nHirb.enable"
 end
+
+commit "Added HIRB to the development environment. Initialized it from the config/environments/development.rb"

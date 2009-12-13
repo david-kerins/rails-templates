@@ -7,3 +7,5 @@ rake "gems:install",
 
 # Generate the migration files for Friendly ID
 generate("friendly_id")
+
+commit "Added friendly_id Gem Depedency. Generated Friendly ID migration files."

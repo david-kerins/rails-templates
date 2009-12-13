@@ -90,7 +90,7 @@ end
 # Shortcut for doing commits
 def commit(m)
   git(:add => '.')
-  git(:commit => "-a -m 'Commit: #{m}'")
+  git(:commit => "-a -m 'Rails Template Commit: #{m}'")
 end
 
 

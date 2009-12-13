@@ -16,5 +16,4 @@ GIT
 
 # Create Git Repository and do an initial commit
 git :init
-git :add => '.'
-git :commit => "-a -m 'Initial commit'"
+commit "Base Setup."

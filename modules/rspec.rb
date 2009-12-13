@@ -23,3 +23,5 @@ end
 open('spec/spec_helper.rb', 'a') do |file|
   file << "\n\nrequire File.dirname(__FILE__) + \"/factories\""
 end
+
+commit "Added Rspec, Rspec Rails and Factory Girl Gem Dependencies. Generated initial RSpec folders and files. Downloaded a simple Factories template. Added a require statement to the spec_helper.rb"
