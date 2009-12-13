@@ -1,0 +1,3 @@
+h1. Example
+
+bc. rails myapp -m http://github.com/meskyanichi/rails-templates/raw/master/basic.rb
