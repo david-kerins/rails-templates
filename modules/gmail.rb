@@ -20,7 +20,6 @@ end
 # Set default Action Mailer url in development
 open('config/environments/development.rb', 'a') do |file|
   file << "\n\nconfig.action_mailer.default_url_options = { :host => 'localhost:3000' }"
-  file << "\n\nrequire 'hirb'\nHirb.enable"
 end
 
 # Set default Action Mailer url in production

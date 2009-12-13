@@ -1,6 +1,7 @@
+# Install the Git Gem
 run "sudo gem install git"
 
-# Create Git Repository and do an initial commit
+# Create a Git Ignore File
 file '.gitignore', <<-GIT
 .DS_Store
 log/*.log
@@ -13,6 +14,7 @@ public/javascripts/all.js
 public/stylesheets/*.css
 GIT
 
+# Create Git Repository and do an initial commit
 git :init
 git :add => '.'
 git :commit => "-a -m 'Initial commit'"
