@@ -45,10 +45,58 @@
 #   - Does an initial commit
 
 
+# 
+# Configuration (PROMPTS)
+# 
+options = Hash.new
+
+if yes? "Would you like Gmail support for Action Mailer?" then
+  options[:gmail] = true
+end
+
+if yes? "Would you like Authentication using Authlogic?" then
+  options[:authlogic] = true
+end
+
+if yes? "Would you like to setup Backup with Whenever?" then
+  options[:backup_whenever] = true
+end
+
+if yes? "Would you like to use Friendly ID to create pretty URLs?" then
+  options[:friendly_id] = true
+end
+
+if yes? "Will you be using jQuery?" then
+  options[:jquery] = true
+end
+
+
+#
+# Helper Methods
+#
+def load_module(m)
+  load_template("http://github.com/meskyanichi/rails-templates/raw/master/modules/#{m}.rb")
+end
+
+def download_file(f)
+  run("curl -O http://github.com/meskyanichi/rails-templates/raw/master/files/#{f}")
+end
+
+def commit(m)
+  git(:add => '.')
+  git(:commit => "-a -m 'Commit: #{m}'")
+end
+
+# 
+# Installation Start
+# 
+
+
+
+
 # Remove unneeded files
 run "rm README"
 run "rm public/index.html"
-run "rm -f public/javascripts/*"
 run "rm -f public/images/*"
 
 # Update Install Gems
@@ -95,7 +143,7 @@ run "sudo rm -f config/deploy.rb"
 
 # Download Custom Capistrano Deployment Recipe
 inside('config') do
-  run 'curl -O http://github.com/meskyanichi/rails-templates/raw/master/capistrano/deploy.rb'
+  download_file('deploy.rb')
 end
 
 # Create the factories file
@@ -107,33 +155,6 @@ run "touch README.textile"
 # Create and Migrate Database
 rake "db:create"
 rake "db:migrate"
-
-# Add Gmail Support to Environment.rb
-open('config/environment.rb', 'a') do |file|
-  file << <<-SMTP
-\n
-ActionMailer::Base.smtp_settings = {
-  :tls            => true,
-  :address        => "smtp.gmail.com",
-  :port           => "587",
-  :domain         => "domain.com",
-  :authentication => :plain,
-  :user_name      => "user@domain.com",
-  :password       => "password" 
-}
-  SMTP
-end
-
-# Set default Action Mailer url in development
-open('config/environments/development.rb', 'a') do |file|
-  file << "\n\nconfig.action_mailer.default_url_options = { :host => 'localhost:3000' }"
-  file << "\n\nrequire 'hirb'\nHirb.enable"
-end
-
-# Set default Action Mailer url in production
-open('config/environments/production.rb', 'a') do |file|
-  file << "\n\nconfig.action_mailer.default_url_options = { :host => 'domain.com' }"
-end
 
 # Create Git Repository and do an initial commit
 file '.gitignore', <<-GIT
