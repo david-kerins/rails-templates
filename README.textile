@@ -1,3 +1,5 @@
 h1. Example
 
-bc. rails myapp -m http://github.com/meskyanichi/rails-templates/raw/master/basic.rb
+p. Just create a new Rails Application and add the *-m* option with the URL to base.rb
+
+bc. rails my_application -m http://github.com/meskyanichi/rails-templates/raw/master/base.rb
