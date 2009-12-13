@@ -118,7 +118,7 @@ gem "erubis"
 rake "gems:install", :sudo => true
 
 # Install Misc. Gems
-run "sudo gem install nifty-generators"
+run "sudo gem install nifty-generators" unless Gem.available? "nifty-generators"
 
 # Install Plugins
 plugin 'exception_notifier',          :git => 'git://github.com/rails/exception_notification.git'
