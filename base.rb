@@ -44,36 +44,39 @@
 #   - Initializes a new Git Repository
 #   - Does an initial commit
 
-
-
 # == Configuration ==============================
 
 options = Hash.new
 
-if yes? "Would you like Gmail support for Action Mailer?" then
-  options[:gmail] = true
-end
+if yes? "Would you like to use all modules?"
+  %w(jquery gmail capistrano authlogic backup_whenever friendly_id).each do |option|
+    options[option.to_sym] = true
+  end
+else
+  if yes? "Would you like Gmail support for Action Mailer? (This will enable you to use Gmail accounts to send emails)"
+    options[:gmail] = true
+  end
+  
+  if yes? "Will you be using jQuery as your javascript library/framework?"
+    options[:jquery] = true
+  end
 
-if yes? "Would you like Authentication using Authlogic?" then
-  options[:authlogic] = true
-end
+  if yes? "Would you like to use Capistrano to deploy your Rails application?"
+    options[:capistrano] = true
+  end
 
-if yes? "Would you like to setup Backup with Whenever?" then
-  options[:backup_whenever] = true
-end
+  if yes? "Would you like to use Authlogic to handle authentication?"
+    options[:authlogic] = true
+  end
 
-if yes? "Would you like to use Friendly ID to create pretty URLs?" then
-  options[:friendly_id] = true
-end
+  if yes? "Would you like to setup Backup with Whenever for running periodic backups?"
+    options[:backup_whenever] = true
+  end
 
-if yes? "Will you be using jQuery?" then
-  options[:jquery] = true
+  if yes? "Would you like to use Friendly ID to be able to create \"pretty\" urls?"
+    options[:friendly_id] = true
+  end
 end
-
-if yes? "Would you like to setup a Capistrano Template?" then
-  options[:capistrano] = true
-end
-
 
 # == Helper Methods ==============================
 
@@ -125,6 +128,12 @@ plugin 'validation_reflection',       :git => 'git://github.com/redinger/validat
 # Run Generators and Utilities
 generate("nifty_layout --haml")
 generate("formtastic")
+
+# Add Exception Notifier Configuration to Environment
+open('config/environment.rb', 'a') do |file|
+  file << "\n\nExceptionNotifier.exception_recipients = %w(mail@some.random.domain.com mail2@some.random.domain.com)"
+  file << "\n# Don't forget to add this inside the ApplicationController:\n# include ExceptionNotifiable"
+end
 
 # Create TEXTILE README file
 run "touch README.textile"
