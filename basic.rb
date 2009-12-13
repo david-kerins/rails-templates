@@ -92,8 +92,7 @@ run "sudo rm -f config/deploy.rb"
 
 # Download Custom Capistrano Deployment Recipe
 inside('config') do
-  run 'curl -O http://gist.github.com/raw/157958/6900de4ad2208f0197b22bf7b07eabbca0bddd58/Capistrano-Deployment-Recipe.rb'
-  run 'mv Capistrano-Deployment-Recipe.rb deploy.rb'
+  run 'curl -O http://github.com/meskyanichi/rails-templates/raw/master/capistrano/deploy.rb'
 end
 
 # Create the factories file
