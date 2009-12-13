@@ -70,8 +70,8 @@ namespace :deploy do
     create_production_log
     create_symlinks
     install_gems
-    #setup_backup
-    #setup_crontab
+    setup_backup
+    setup_crontab
     set_permissions
     restart_passenger
   end
