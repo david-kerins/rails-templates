@@ -45,9 +45,9 @@
 #   - Does an initial commit
 
 
-# 
-# Configuration (PROMPTS)
-# 
+
+# == Configuration ==============================
+
 options = Hash.new
 
 if yes? "Would you like Gmail support for Action Mailer?" then
@@ -70,29 +70,31 @@ if yes? "Will you be using jQuery?" then
   options[:jquery] = true
 end
 
+if yes? "Would you like to setup a Capistrano Template?" then
+  options[:capistrano] = true
+end
 
-#
-# Helper Methods
-#
+
+# == Helper Methods ==============================
+
+# Shortcut for loading modules
 def load_module(m)
   load_template("http://github.com/meskyanichi/rails-templates/raw/master/modules/#{m}.rb")
 end
 
+# Shortcut for download files
 def download_file(f)
   run("curl -O http://github.com/meskyanichi/rails-templates/raw/master/files/#{f}")
 end
 
+# Shortcut for doing commits
 def commit(m)
   git(:add => '.')
   git(:commit => "-a -m 'Commit: #{m}'")
 end
 
-# 
-# Installation Start
-# 
 
-
-
+# == Installation Start ==============================
 
 # Remove unneeded files
 run "rm README"
@@ -103,72 +105,45 @@ run "rm -f public/images/*"
 run "sudo gem update --system"
 run "sudo gem update"
 
-# Set Gems
-gem "rspec",
-  :lib => false
-gem "rspec-rails",
-  :lib => false
-gem "factory_girl" 
+# Set Default Gems
 gem "formtastic"
 gem "will_paginate"
 gem "haml"
-gem "whenever"
-gem "backup"
 gem "erubis"
-gem "friendly_id"
-gem "authlogic"
 
 # Install Set Gems
 rake "gems:install", :sudo => true
 
-# Install Other Gems
-run "sudo gem install hirb"
+# Install Misc. Gems
+run "sudo gem install nifty-generators"
 
 # Install Plugins
-plugin 'jrails',                      :git => 'git://github.com/aaronchi/jrails.git'
 plugin 'exception_notifier',          :git => 'git://github.com/rails/exception_notification.git'
 plugin 'rails_xss',                   :git => 'git://github.com/NZKoz/rails_xss.git'
-plugin 'action_mailer_optional_tls',  :git => 'git://github.com/collectiveidea/action_mailer_optional_tls.git'
 plugin 'validation_reflection',       :git => 'git://github.com/redinger/validation_reflection.git'
 
 # Run Generators and Utilities
 generate("nifty_layout --haml")
-generate("rspec")
-generate("backup")
 generate("formtastic")
-generate("friendly_id")
-run "sudo wheneverize ."
-run "sudo capify ."
-run "sudo rm -f config/deploy.rb"
-
-# Download Custom Capistrano Deployment Recipe
-inside('config') do
-  download_file('deploy.rb')
-end
-
-# Create the factories file
-run "touch spec/factories.rb"
 
 # Create TEXTILE README file
 run "touch README.textile"
+
+# Load modules
+load_module("git")
+load_module("hirb")
+load_module("rspec")
+
+# Load optional modules
+load_module("gmail")            if options[:gmail]
+load_module("jquery")           if options[:jquery]
+load_module("capistrano")       if options[:capistrano]
+load_module("backup_whenever")  if options[:backup_whenever]
+load_module("friendly_id")      if options[:friendly_id]
+load_module("authlogic")        if options[:authlogic]
 
 # Create and Migrate Database
 rake "db:create"
 rake "db:migrate"
 
-# Create Git Repository and do an initial commit
-file '.gitignore', <<-GIT
-.DS_Store
-log/*.log
-tmp/**/*
-config/database.yml
-db/*.sqlite3
-public/assets
-public/system
-public/javascripts/all.js
-public/stylesheets/*.css
-GIT
-
-git :init
-git :add => '.'
-git :commit => "-a -m 'Initial Commit'"
+p "Rails Application Installed!"

@@ -1,3 +1,6 @@
+# Install the Action Mailer Optional TLS plugin
+plugin 'action_mailer_optional_tls',  :git => 'git://github.com/collectiveidea/action_mailer_optional_tls.git'
+
 # Add Gmail Support to Environment.rb
 open('config/environment.rb', 'a') do |file|
   file << <<-SMTP
