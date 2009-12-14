@@ -70,7 +70,6 @@ namespace :deploy do
     create_production_log
     create_symlinks
     install_gems
-    setup_backup
     setup_crontab
     set_permissions
     restart_passenger
@@ -112,12 +111,6 @@ namespace :deploy do
   task :setup_crontab, :roles => :db do
     puts "\n\n\n\n=== Updating the Crontab! ===\n\n\n\n"
     run "cd #{release_path} && whenever --update-crontab #{crontab_id}"
-  end
-  
-  desc "Manages the Backup database for the Backup Gem."
-  task :setup_backup do
-    puts "\n\n\n\n=== Setting up Backup environment! ===\n\n\n\n"
-    run "cd #{release_path} && rake backup:setup:capistrano"
   end
  
   desc "Installs any 'not-yet-installed' gems on the production server."
