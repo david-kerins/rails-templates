@@ -11,8 +11,11 @@
 #     cap deploy:setup
 #     cap deploy
 #     cap deploy:gems:install
+#     cap deploy:db:create
 #     cap deploy:db:migrate
 #     cap deploy:passenger:restart
+#
+#     (or run "cap deploy:initial" do run all of these)
 #     
 #   Then For Every Update Just Do:
 #     git add .
@@ -29,14 +32,13 @@
 # Configuration
 
 # This configuration is essential
-set   :application,         "domain.com" or "some.ip"
-set   :crontab_id,          application
+set   :application,         "mydomain.com"
 set   :user,                "root" 
 set   :deploy_to,           "/var/rails/#{application}"
 set   :repository_path,     "/var/git/#{application}.git"
 set   :repository,          "ssh://#{user}@#{application}#{repository_path}"
 
-# The following configuration usually doesn't need to be altered
+# The following configuration usually doesn't need to be altered (much)
 set   :scm,                 "git"
 set   :branch,              "master"
 set   :use_sudo,            false
@@ -45,6 +47,15 @@ role  :app,                 application
 role  :db,                  application
 default_run_options[:pty] = true 
 
+# Symlinks that should be created (append more or remove)
+# The index[0] is the shared_path
+# The index[1] is the release_path
+symlink_configuration = [
+  ['config/database.yml',     'config/database.yml'   ],
+  ['db/production.sqlite3',   'db/production.sqlite3' ],
+  ['assets',                  'public/assets'         ],
+  ['system',                  'public/system'         ]
+]
 
 namespace :deploy do
   
@@ -71,6 +82,16 @@ namespace :deploy do
  
  
   # Deployment Tasks
+  
+  desc "Executes the initial procedures for deploying a Ruby on Rails Application."
+  task :initial do
+    system "cap deploy:setup"
+    system "cap deploy"
+    system "cap deploy:gems:install"
+    system "cap deploy:db:create"
+    system "cap deploy:db:migrate"
+    system "cap deploy:passenger:restart"
+  end
   
   namespace :passenger do
 
@@ -99,10 +120,9 @@ namespace :deploy do
   desc "Creates symbolic links from shared folder"
   task :setup_symlinks do
     puts "\n\n=== Setting up Symbolic Links! ===\n\n"
-    run "ln -nfs #{File.join(shared_path, 'config', 'database.yml')}        #{File.join(release_path, 'config', 'database.yml')}"
-    run "ln -nfs #{File.join(shared_path, 'db',     'production.sqlite3')}  #{File.join(release_path, 'db',     'production.sqlite3')}"
-    run "ln -nfs #{File.join(shared_path, 'assets')}                        #{File.join(release_path, 'public', 'assets')}"
-    run "ln -nfs #{File.join(shared_path, 'system')}                        #{File.join(release_path, 'public', 'system')}"
+    symlink_configuration.each do |config|
+      run "ln -nfs #{File.join(shared_path, config[0])} #{File.join(release_path, config[1])}"
+    end
   end
   
 
@@ -118,14 +138,14 @@ namespace :deploy do
     
     desc "Create Production Database"
     task :create do
-      puts "\n\n=== Setting up Production Database! ===\n\n"
-      run "cd #{current_path}; rake db:migrate RAILS_ENV=production"
+      puts "\n\n=== Creating the Production Database! ===\n\n"
+      run "cd #{current_path}; rake db:create RAILS_ENV=production"
       run "chown -R www-data:www-data #{deploy_to}"
     end
   
     desc "Migrate Production Database"
     task :migrate do
-      puts "\n\n=== Setting up Production Database! ===\n\n"
+      puts "\n\n=== Migrating the Production Database! ===\n\n"
       run "cd #{current_path}; rake db:migrate RAILS_ENV=production"
       run "chown -R www-data:www-data #{deploy_to}"
     end
@@ -200,7 +220,7 @@ namespace :deploy do
     desc "Update the crontab file for the Whenever Gem."
     task :update, :roles => :db do
       puts "\n\n=== Updating the Crontab! ===\n\n"
-      run "cd #{release_path} && whenever --update-crontab #{crontab_id}"
+      run "cd #{release_path} && whenever --update-crontab #{application}"
     end
     
   end
