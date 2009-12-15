@@ -26,35 +26,41 @@
 #   For Apache2 Users
 #     cap deploy:apache:create
 #     cap deploy:apache:destroy
+#     cap deploy:apache:restart
 #
-
+#   For NginX Users
+#     cap deploy:nginx:create
+#     cap deploy:nginx:destroy
+#     cap deploy:nginx:restart
 
 # Configuration
 
-# This configuration is essential
-set   :application,         "mydomain.com"
-set   :user,                "root" 
+# This configuration is *essential*
+set   :application,         "domain.com"
+set   :user,                "root"
+
+# This configuration is *conventional*
 set   :deploy_to,           "/var/rails/#{application}"
 set   :repository_path,     "/var/git/#{application}.git"
 set   :repository,          "ssh://#{user}@#{application}#{repository_path}"
 
-# The following configuration usually doesn't need to be altered (much)
+# The following configuration *optional*
 set   :scm,                 "git"
 set   :branch,              "master"
-set   :use_sudo,            false
+set   :use_sudo,            true
 role  :web,                 application
 role  :app,                 application
 role  :db,                  application
 default_run_options[:pty] = true 
 
-# Symlinks that should be created (append more or remove)
+# Symlinks that should be created after each deployment
 # The index[0] is the shared_path
 # The index[1] is the release_path
 symlink_configuration = [
   ['config/database.yml',     'config/database.yml'   ],
   ['db/production.sqlite3',   'db/production.sqlite3' ],
-  ['assets',                  'public/assets'         ],
-  ['system',                  'public/system'         ]
+  ['system',                  'public/system'         ],
+  ['assets',                  'public/assets'         ]
 ]
 
 namespace :deploy do
@@ -227,7 +233,7 @@ namespace :deploy do
 
   namespace :apache do
     
-    desc "Adds Apache2 configuraion and enables them."
+    desc "Adds Apache2 configuration and enables it."
     task :create do
       puts "\n\n=== Adding Apache2 Virtual Host for #{application}! ===\n\n"
       config = <<-CONFIG
@@ -247,12 +253,57 @@ namespace :deploy do
       run "sudo /etc/init.d/apache2 restart"
     end
     
-    desc "Adds Apache2 configuraion and enables them."
+    desc "Restarts Apache2."
+    task :restart do
+      run "sudo /etc/init.d/apache2 restart"
+    end
+    
+    desc "Removes Apache2 configuration and disables it."
     task :destroy do
       puts "\n\n=== Removing Apache2 Virtual Host for #{application}! ===\n\n"
       begin run("a2dissite #{application}"); rescue; end
-      begin run("sudo rm -f /etc/apache2/sites-available/#{application}"); rescue; end
-      begin run("sudo /etc/init.d/apache2 restart"); rescue; end
+      begin run("sudo rm /etc/apache2/sites-available/#{application}"); rescue; end
+      run("sudo /etc/init.d/apache2 restart")
+    end
+
+  end
+  
+  namespace :nginx do
+    
+    desc "Adds NginX configuration and enables it."
+    task :create do
+      puts "\n\n=== Adding NginX Virtual Host for #{application}! ===\n\n"
+      config = <<-CONFIG
+      server {
+        listen 80;
+        root #{File.join(deploy_to, 'current', 'public')};
+        passenger_enabled on;
+      }
+      CONFIG
+            
+      file = File.new("tmp/#{application}", "w")
+      file << config
+      file.close
+      run "mkdir -p /opt/nginx/conf/sites-enabled"
+      system "rsync -vr tmp/#{application} #{user}@#{application}:/opt/nginx/conf/sites-enabled/#{application}"
+      File.delete("tmp/#{application}")
+      system 'cap deploy:nginx:restart'
+    end
+    
+    desc "Restarts NginX."
+    task :restart do
+      Net::SSH.start(application, user) {|ssh| ssh.exec "/etc/init.d/nginx stop"}
+      Net::SSH.start(application, user) {|ssh| ssh.exec "/etc/init.d/nginx start"}
+    end
+    
+    desc "Removes NginX configuration and disables it."
+    task :destroy do
+      puts "\n\n=== Removing NginX Virtual Host for #{application}! ===\n\n"
+      begin
+        run("rm /opt/nginx/conf/sites-enabled/#{application}")
+      ensure
+        system 'cap deploy:nginx:restart'
+      end
     end
 
   end
