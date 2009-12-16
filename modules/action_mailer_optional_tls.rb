@@ -9,7 +9,7 @@ end
 
 # Add Gmail Support to Environment.rb
 open('config/environment.rb', 'a') do |file|
-  file << 'require "config/mail"'
+  file << "\n\nrequire \"mail\""
 end
 
 # Set default Action Mailer url in development
