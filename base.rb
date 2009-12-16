@@ -145,6 +145,7 @@ end
 load_module("git")
 load_module("hirb")
 load_module("rspec")
+load_module("validatious-on-rails")
 
 # Load optional modules
 load_module("gmail")            if options[:gmail]
