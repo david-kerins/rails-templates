@@ -68,6 +68,11 @@ def ensure_gem_installed(gem)
   run "sudo gem install #{gem}" unless Gem.available? gem
 end
 
+# Inserts text into a file
+def inject_file(path, regexp, *args, &block)
+  content = File.read(path).gsub(regexp, *args, &block)
+  File.open(path, 'wb') { |file| file.write(content) }
+end
 
 # == Installation Start ==============================
 
