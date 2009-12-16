@@ -20,4 +20,5 @@ inside('public/stylesheets') do
   run "mkdir sass"
   run "css2sass formtastic.css sass/formtastic.sass"
   run "css2sass formtastic_changes.css sass/formtastic_changes.sass"
+  run "rm formtastic*"
 end
