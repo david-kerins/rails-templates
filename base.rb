@@ -65,6 +65,10 @@ else
   if yes? "Would you like to use Capistrano to deploy your Rails application?"
     options[:capistrano] = true
   end
+  
+  if yes? "Would you like to use Paperclip to enable file uploads and image manipulation?"
+    options[:paperclip] = true
+  end
 
   if yes? "Would you like to use Authlogic to handle authentication?"
     options[:authlogic] = true
@@ -149,6 +153,7 @@ load_module("capistrano")       if options[:capistrano]
 load_module("backup_whenever")  if options[:backup_whenever]
 load_module("friendly_id")      if options[:friendly_id]
 load_module("authlogic")        if options[:authlogic]
+load_module("paperclip")        if options[:paperclip]
 
 # Create and Migrate Database
 rake "db:create"
