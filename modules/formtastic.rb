@@ -23,4 +23,10 @@ inside('public/stylesheets') do
   run "rm formtastic*"
 end
 
+
+inject_file('app/views/layouts/application.html.haml', /= stylesheet_link_tag 'application'/) do |row|
+  "#{row}, 'formtastic', 'formtastic_changes'"
+end
+
+
 commit "Installed Formtastic and Validation Reflection. Generated the Formtastic CSS files and converted them to SASS files."

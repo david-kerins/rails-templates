@@ -89,14 +89,14 @@ run "sudo gem update"
 load_module "git"
 load_module "hirb"
 load_module "rspec"
+load_module "haml"
+load_module "nifty_generators"
+load_module "formtastic"
 load_module "exception_notifier"
 load_module "jrails"
-load_module "haml"
-load_module "formtastic"
-load_module "validatious-on-rails"
+load_module "validatious_on_rails"
 load_module "rails_xss"
 load_module "will_paginate"
-load_module "nifty_generators"
 load_module "capistrano"
 load_module "backup_whenever"
 load_module "action_mailer_optional_tls"
@@ -108,8 +108,5 @@ load_module "authlogic"
 # Create and Migrate Database
 rake "db:create"
 rake "db:migrate"
-
-# Downloads the TODO file
-download_file("TODO_RAILS_TEMPLATE")
 
 p "Rails Application Installed!"
