@@ -17,6 +17,7 @@ ensure_gem_installed("haml")
 
 # Convert CSS to SASS
 inside('public/stylesheets') do
+  run "mkdir sass"
   run "css2sass formtastic.css sass/formtastic.sass"
   run "css2sass formtastic_changes.css sass/formtastic_changes.sass"
 end
