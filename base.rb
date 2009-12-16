@@ -69,6 +69,9 @@ def ensure_gem_installed(gem)
 end
 
 
+load_module "delayed_job"
+exit
+
 # == Installation Start ==============================
 
 # Remove unneeded files
@@ -97,6 +100,7 @@ load_module "backup_whenever"
 load_module "action_mailer_optional_tls"
 load_module "paperclip"
 load_module "friendly_id"
+load_module "delayed_job"
 load_module "authlogic"
 
 # Create and Migrate Database
