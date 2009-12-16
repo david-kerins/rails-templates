@@ -7,3 +7,5 @@ rake "gems:install",
 
 # Generate the javascript files
 generate "validatious"
+
+commit "Installed the Validatious on Rails Gem and generated the javascript files."

@@ -6,3 +6,5 @@ plugin 'exception_notifier',
 open('config/environment.rb', 'a') do |file|
   file << "\n\nExceptionNotifier.exception_recipients = %w(mail@example.com mail2@example.com)"
 end
+
+commit "Installed Exception Notifier Plugin and added the exception_recipients to the environment.rb file."

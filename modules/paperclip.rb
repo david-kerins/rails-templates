@@ -10,4 +10,4 @@ inside('lib/tasks') do
   download_file('paperclip_tasks.rake')
 end
 
-commit "Installed Paperclip, Downloaded Paperclip Rake Tasks."
+commit "Installed Paperclip, Added Paperclip Rake Tasks."

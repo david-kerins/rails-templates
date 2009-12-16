@@ -22,3 +22,5 @@ inside('public/stylesheets') do
   run "css2sass formtastic_changes.css sass/formtastic_changes.sass"
   run "rm formtastic*"
 end
+
+commit "Installed Formtastic and Validation Reflection. Generated the Formtastic CSS files and converted them to SASS files."

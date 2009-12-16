@@ -8,3 +8,5 @@ gem "erubis"
 # Install the Gem
 rake "gems:install",
   :sudo => true
+  
+commit "Installed the Rails XSS plugin. Installed the Erubis Gem and added it as a dependency."

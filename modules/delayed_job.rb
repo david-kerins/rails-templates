@@ -7,7 +7,6 @@ rake "gems:install",
 
 open('Rakefile', 'a') do |file|
   file << <<-CONFIG
-\n
 begin
   require 'delayed/tasks'
 rescue LoadError
@@ -17,3 +16,5 @@ end
 end
 
 generate('delayed_job')
+
+commit "Installed Delayed Job. Appended Tasks to the Rakefile and generated the migration file."

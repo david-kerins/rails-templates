@@ -69,9 +69,6 @@ def ensure_gem_installed(gem)
 end
 
 
-load_module "delayed_job"
-exit
-
 # == Installation Start ==============================
 
 # Remove unneeded files
