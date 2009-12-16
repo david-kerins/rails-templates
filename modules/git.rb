@@ -1,5 +1,5 @@
-# Install the Git Gem
-run "sudo gem install git" unless Gem.available? "git"
+# Ensure that Git is installed
+ensure_gem_installed("git")
 
 # Create a Git Ignore File
 file '.gitignore', <<-GIT

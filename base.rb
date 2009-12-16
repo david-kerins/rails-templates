@@ -63,6 +63,11 @@ def commit(m)
   git(:commit => "-a -m 'Rails Template Commit: #{m}'")
 end
 
+# Ensures the specified gem is installed
+def ensure_gem_installed(gem)
+  run "sudo gem install #{gem}" unless Gem.available? gem
+end
+
 
 # == Installation Start ==============================
 
@@ -81,10 +86,10 @@ load_module "hirb"
 load_module "rspec"
 load_module "exception_notifier"
 load_module "jrails"
+load_module "haml"
 load_module "formtastic"
 load_module "validatious-on-rails"
 load_module "rails_xss"
-load_module "haml"
 load_module "will_paginate"
 load_module "nifty_generators"
 load_module "capistrano"

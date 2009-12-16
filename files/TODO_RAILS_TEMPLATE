@@ -1,3 +1,9 @@
+== ACTION MAILER OPTIONAL TLS ==================
+
+=> environment.rb
+configure this with TLS / GMAIL settings
+
+
 == VALIDATIOUS ON RAILS ========================
 
 => application.html.haml
@@ -9,12 +15,6 @@
 
 => application_controller.rb
 include ExceptionNotifiable
-
-
-== Action Mailer Optional TLS ==================
-
-=> environment.rb
-configure this with TLS / GMAIL settings
 
 
 == FORMTASTIC ==================================

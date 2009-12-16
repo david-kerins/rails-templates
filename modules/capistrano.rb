@@ -1,5 +1,5 @@
-# Install Capistrano
-run "sudo gem install capistrano" unless Gem.available? "capistrano"
+# Ensure that Capistrano is installed
+ensure_gem_installed("capistrano")
 
 # Initializ Capistrano
 run "sudo capify ."

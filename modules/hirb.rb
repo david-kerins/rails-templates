@@ -1,5 +1,5 @@
-# Install Other Gems
-run "sudo gem install hirb" unless Gem.available? "hirb"
+# Ensure that HIRB is installed
+ensure_gem_installed("hirb")
 
 # Set default Action Mailer url in production
 open('config/environments/development.rb', 'a') do |file|
