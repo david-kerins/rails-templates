@@ -45,45 +45,6 @@
 #   - Does an initial commit
 
 
-# == Configuration ==============================
-
-options = Hash.new
-
-if yes? "Would you like to use all modules?"
-  %w(jquery gmail capistrano authlogic backup_whenever friendly_id).each do |option|
-    options[option.to_sym] = true
-  end
-else
-  if yes? "Would you like to install \"Action Mailer Optional TLS\"? Enables TLS on SMTP connection for Action Mailer. (Which also enables support for Gmail and other services)"
-    options[:action_mailer_optional_tls] = true
-  end
-  
-  if yes? "Would you like to use jQuery with jRails as your javascript library/framework?"
-    options[:jrails] = true
-  end
-
-  if yes? "Would you like to use Capistrano to deploy your Rails application?"
-    options[:capistrano] = true
-  end
-  
-  if yes? "Would you like to use Paperclip to enable file uploads and image manipulation?"
-    options[:paperclip] = true
-  end
-
-  if yes? "Would you like to use Authlogic to handle authentication?"
-    options[:authlogic] = true
-  end
-
-  if yes? "Would you like to setup Backup with Whenever for running periodic backups?"
-    options[:backup_whenever] = true
-  end
-
-  if yes? "Would you like to use Friendly ID to be able to create \"pretty\" urls?"
-    options[:friendly_id] = true
-  end
-end
-
-
 # == Helper Methods ==============================
 
 # Shortcut for loading modules
@@ -114,47 +75,24 @@ run "rm -f public/images/*"
 run "sudo gem update --system"
 run "sudo gem update"
 
-# Set Default Gems
-gem "formtastic"
-gem "will_paginate"
-gem "haml"
-gem "erubis"
-
-# Install Set Gems
-rake "gems:install", :sudo => true
-
-# Install Misc. Gems
-run "sudo gem install nifty-generators" unless Gem.available? "nifty-generators"
-
-# Install Plugins
-plugin 'exception_notifier',          :git => 'git://github.com/rails/exception_notification.git'
-plugin 'rails_xss',                   :git => 'git://github.com/NZKoz/rails_xss.git'
-plugin 'validation_reflection',       :git => 'git://github.com/redinger/validation_reflection.git'
-
-# Run Generators and Utilities
-generate("nifty_layout --haml")
-generate("formtastic")
-
-# Add Exception Notifier Configuration to Environment
-open('config/environment.rb', 'a') do |file|
-  file << "\n\nExceptionNotifier.exception_recipients = %w(mail@some.random.domain.com mail2@some.random.domain.com)"
-  file << "\n# Don't forget to add this inside the ApplicationController:\n# include ExceptionNotifiable"
-end
-
-# Load modules
-load_module("git")
-load_module("hirb")
-load_module("rspec")
-load_module("validatious-on-rails")
-
-# Load optional modules
-load_module("action_mailer_optional_tls")   if options[:action_mailer_optional_tls]
-load_module("jrails")                       if options[:jrails]
-load_module("capistrano")                   if options[:capistrano]
-load_module("backup_whenever")              if options[:backup_whenever]
-load_module("friendly_id")                  if options[:friendly_id]
-load_module("authlogic")                    if options[:authlogic]
-load_module("paperclip")                    if options[:paperclip]
+# Load default modules
+load_module "git"
+load_module "hirb"
+load_module "rspec"
+load_module "exception_notifier"
+load_module "jrails"
+load_module "validatious-on-rails"
+load_module "formtastic"
+load_module "rails_xss"
+load_module "haml"
+load_module "will_paginate"
+load_module "nifty_generators"
+load_module "capistrano"
+load_module "backup_whenever"
+load_module "action_mailer_optional_tls"
+load_module "paperclip"
+load_module "friendly_id"
+load_module "authlogic"
 
 # Create and Migrate Database
 rake "db:create"
