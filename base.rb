@@ -55,11 +55,11 @@ if yes? "Would you like to use all modules?"
   end
 else
   if yes? "Would you like to install \"Action Mailer Optional TLS\"? Enables TLS on SMTP connection for Action Mailer. (Which also enables support for Gmail and other services)"
-    options[:gmail] = true
+    options[:action_mailer_optional_tls] = true
   end
   
-  if yes? "Will you be using jQuery as your javascript library/framework?"
-    options[:action_mailer_optional_tls] = true
+  if yes? "Would you like to use jQuery with jRails as your javascript library/framework?"
+    options[:jrails] = true
   end
 
   if yes? "Would you like to use Capistrano to deploy your Rails application?"
@@ -149,7 +149,7 @@ load_module("validatious-on-rails")
 
 # Load optional modules
 load_module("action_mailer_optional_tls")   if options[:action_mailer_optional_tls]
-load_module("jquery")                       if options[:jquery]
+load_module("jrails")                       if options[:jrails]
 load_module("capistrano")                   if options[:capistrano]
 load_module("backup_whenever")              if options[:backup_whenever]
 load_module("friendly_id")                  if options[:friendly_id]
@@ -160,6 +160,7 @@ load_module("paperclip")                    if options[:paperclip]
 rake "db:create"
 rake "db:migrate"
 
+# Downloads the TODO file
 download_file("TODO_RAILS_TEMPLATE")
 
 p "Rails Application Installed!"
