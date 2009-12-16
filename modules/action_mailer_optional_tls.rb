@@ -1,20 +1,15 @@
 # Install the Action Mailer Optional TLS plugin
-plugin 'action_mailer_optional_tls',  :git => 'git://github.com/collectiveidea/action_mailer_optional_tls.git'
+plugin 'action_mailer_optional_tls',
+  :git => 'git://github.com/collectiveidea/action_mailer_optional_tls.git'
+
+# Download the configuration
+inside('config') do
+  download_file('mail.rb')
+end
 
 # Add Gmail Support to Environment.rb
 open('config/environment.rb', 'a') do |file|
-  file << <<-SMTP
-\n
-ActionMailer::Base.smtp_settings = {
-  :tls            => true,
-  :address        => "smtp.gmail.com",
-  :port           => "587",
-  :domain         => "domain.com",
-  :authentication => :plain,
-  :user_name      => "user@domain.com",
-  :password       => "password" 
-}
-  SMTP
+  file << 'require "config/mail"'
 end
 
 # Set default Action Mailer url in development
