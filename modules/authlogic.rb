@@ -32,7 +32,7 @@ inside("lib/authlogic/custom") do
 end
 
 inside("app/views/users") do
-  run "rm -f _form.html.haml"
+  run "rm _form.html.haml"
   download_file("authlogic/_form.html.haml")
 end
 
