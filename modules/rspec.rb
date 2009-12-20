@@ -16,7 +16,7 @@ generate("rspec")
 
 # Create the Factory Girl's factories file
 inside("spec") do
-  download_file("factories.rb")
+  download_file("rspec/factories.rb")
 end
 
 # Injects the require statement for Factory Girl into the spec_helper.rb file

@@ -4,7 +4,7 @@ plugin 'action_mailer_optional_tls',
 
 # Download the configuration
 inside('config') do
-  download_file('mail.rb')
+  download_file('action_mailer_optional_tls/mail.rb')
 end
 
 # Add Gmail Support to Environment.rb

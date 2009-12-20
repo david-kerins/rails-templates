@@ -13,6 +13,8 @@
 #   - HAML: Sets gem dependency, installs gem
 #   - Will Paginate: Sets gem dependency, installs gem
 #   - Authlogic: Sets gem dependency, installs gem
+#   - CanCan: Sets gem dependency, installs gem, adds the ability.rb to models folder
+#   - Delayed Job: Sets gem dependency, installs gem, updates Rakefile
 #   - Whenever: Sets gem dependency, installs gem, generates schedule.rb file in the config folder
 #   - Backup: Sets gem dependency, installs gem, generates backup.rake in lib/tasks and backup.rb in the config folder, generates migration file
 #   - Friendly Id: Sets gem dependency, installs gem, generates migration file
@@ -43,9 +45,16 @@
 #   - Creates a .gitignore file containing essential file ignoration
 #   - Initializes a new Git Repository
 #   - Does an initial commit
+#   - Does a commit for every installed module
 
 
 # == Helper Methods ==============================
+
+# Methods for storing modules that are requested
+def modules
+  @modules ||= Array.new
+  @modules
+end
 
 # Shortcut for loading modules
 def load_module(m)
@@ -74,6 +83,19 @@ def inject_file(path, regexp, *args, &block)
   File.open(path, 'wb') { |file| file.write(content) }
 end
 
+
+# == Modules To Be Loaded ============================
+
+if yes? "Would you like to use Authlogic and CanCan for Authentication and Authorization?"
+  modules << :authlogic
+  modules << :cancan
+end
+
+if yes? "Would you like to use Delayed Job?"
+  modules << :delayed_job
+end
+
+
 # == Installation Start ==============================
 
 # Remove unneeded files
@@ -82,8 +104,8 @@ run "rm public/index.html"
 run "rm -f public/images/*"
 
 # Update Install Gems
-run "sudo gem update --system"
-run "sudo gem update"
+# run "sudo gem update --system"
+# run "sudo gem update"
 
 # Load default modules
 load_module "git"
@@ -102,8 +124,9 @@ load_module "backup_whenever"
 load_module "action_mailer_optional_tls"
 load_module "paperclip"
 load_module "friendly_id"
-load_module "delayed_job"
-load_module "authlogic"
+modules.each do |m|
+  load_module(m.to_s)
+end
 
 # Create and Migrate Database
 rake "db:create"

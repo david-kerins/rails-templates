@@ -9,7 +9,7 @@ run "sudo rm -f config/deploy.rb"
 
 # Download Custom Capistrano Deployment Recipe
 inside('config') do
-  download_file('deploy.rb')
+  download_file('capistrano/deploy.rb')
 end
 
 commit "Installed Capistrano, Initialized Capistrano, Replaced default deploy.rb with custom deploy.rb."

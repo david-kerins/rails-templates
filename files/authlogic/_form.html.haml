@@ -1,0 +1,6 @@
+- semantic_form_for(@user) do |form|
+  - form.inputs do
+    = form.inputs :username, :email, :password, :password_confirmation
+  
+  - form.buttons do
+    = form.commit_button "Sign Up!"

@@ -7,7 +7,7 @@ rake "gems:install",
 
 # Download Custom Capistrano Deployment Recipe
 inside('lib/tasks') do
-  download_file('paperclip_tasks.rake')
+  download_file('paperclip/paperclip_tasks.rake')
 end
 
 commit "Installed Paperclip, Added Paperclip Rake Tasks."

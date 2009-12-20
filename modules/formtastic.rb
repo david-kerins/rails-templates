@@ -23,9 +23,12 @@ inside('public/stylesheets') do
   run "rm formtastic*"
 end
 
+inject_file('app/views/layouts/application.html.haml', /= stylesheet_link_tag 'application'/) do |match|
+  "#{match}, 'formtastic', 'formtastic_changes'"
+end
 
-inject_file('app/views/layouts/application.html.haml', /= stylesheet_link_tag 'application'/) do |row|
-  "#{row}, 'formtastic', 'formtastic_changes'"
+inside("config/locales") do
+  download_file("formtastic/formtastic.en.yml")
 end
 
 
