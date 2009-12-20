@@ -27,9 +27,18 @@ inject_file('app/views/layouts/application.html.haml', /= stylesheet_link_tag 'a
   "#{match}, 'formtastic', 'formtastic_changes'"
 end
 
-inside("config/locales") do
-  download_file("formtastic/formtastic.en.yml")
+inject_file('config/initializers/formtastic.rb', /# Formtastic::SemanticFormBuilder.inline_errors = :sentence/) do
+  "Formtastic::SemanticFormBuilder.inline_errors = :list"
 end
 
+inject_file('config/initializers/formtastic.rb', /# Formtastic::SemanticFormBuilder.i18n_lookups_by_default = false/) do
+  "Formtastic::SemanticFormBuilder.i18n_lookups_by_default = true"
+end
+
+inside("config/locales") do
+  run "rm -f en.yml"
+  download_file("formtastic/formtastic.en.yml")
+  download_file("formtastic/en.yml")
+end
 
 commit "Installed Formtastic and Validation Reflection. Generated the Formtastic CSS files and converted them to SASS files."

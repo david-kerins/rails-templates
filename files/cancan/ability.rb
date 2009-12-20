@@ -3,6 +3,7 @@ class Ability
 
   def initialize(user)
     # can :manage, :all
+    # can :read, :all
     # can :create, :all
     # can :update, :all
     # can :destroy, :all

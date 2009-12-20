@@ -15,7 +15,7 @@
 #     cap deploy:db:migrate
 #     cap deploy:passenger:restart
 #
-#     (or run "cap deploy:initial" do run all of these)
+#     * or run "cap deploy:initial" do run all of these
 #     
 #   Then For Every Update Just Do:
 #     git add .
@@ -34,12 +34,18 @@
 #     cap deploy:nginx:destroy
 #     cap deploy:nginx:restart
 #     cap deploy:destroy_all:nginx
+#
+#   For a Full List of Commands
+#     cap -T
 
-# Configuration
+
+# =================================== #
+# START CONFIGURATION                 #
+# =================================== #
 
 # This configuration is *essential*
 
-set   :ip,                  "123.45.6785.910"
+set   :ip,                  "123.45.678.910"
 set   :domain,              "domain.com"
 set   :subdomain,           false # unless domain is a subdomain, e.g. subdomain.domain.com
 set   :user,                "root"
@@ -59,25 +65,35 @@ role  :app,                 application
 role  :db,                  application
 default_run_options[:pty] = true 
 
-# Symlinks
-# that should be created after each deployment
-#
-# The index[0] is the shared_path
-# The index[1] is the release_path
+# Setup Shared Folders
+#   that should be created inside the shared_path
+directory_configuration = %w(db config system)
+
+# Setup Symlinks
+#   that should be created after each deployment
 symlink_configuration = [
   %w(config/database.yml    config/database.yml),
   %w(db/production.sqlite3  db/production.sqlite3),
   %w(system                 public/system)
 ]
 
-# Shared Folders
-# That should be created inside the shared_path
-directory_configuration = %w(db config system)
+# Application Specific Tasks
+#   that should be performed at the end of each deployment
+def application_specific_tasks
+  # system 'cap deploy:whenever:update_crontab'
+  # system 'cap deploy:delayed_job:stop'
+  # system 'cap deploy:delayed_job:start n=1'
+  # system 'cap deploy:run_command command="ls -la"'
+end
 
 
 
 
 
+# =================================== #
+# END CONFIGURATION                   #
+# DON'T EDIT THE CONFIGURATION BELOW  #
+# =================================== #
 
 #
 # Helper Methods
@@ -91,21 +107,9 @@ def create_tmp_file(contents)
 end
 
 # 
-# Do Not Alter The Recipe Below!
+# Capistrano Recipe
 # 
 namespace :deploy do
-  
-  # Tasks that run after the (cap deploy:setup)
-  
-  desc "Sets up the shared path"
-  task :setup_shared_path do
-    puts "\n\n=== Setting up the shared path! ===\n\n"
-    directory_configuration.each do |directory|
-      run "mkdir -p #{shared_path}/#{directory}"
-    end
-    system "cap deploy:db:update_yaml"
-  end
-  
   
   # Tasks that run after every deployment (cap deploy)
   
@@ -114,6 +118,7 @@ namespace :deploy do
     puts "\n\n=== Running Custom Processes! ===\n\n"
     create_production_log
     setup_symlinks
+    application_specific_tasks    
     set_permissions
     system 'cap deploy:passenger:restart'
   end
@@ -281,16 +286,32 @@ namespace :deploy do
 
   end
   
-  namespace :crontab do
+  namespace :whenever do
     
     desc "Update the crontab file for the Whenever Gem."
-    task :update, :roles => :db do
+    task :update_crontab, :roles => :db do
       puts "\n\n=== Updating the Crontab! ===\n\n"
       run "cd #{release_path} && whenever --update-crontab #{domain}"
     end
     
   end
 
+  namespace :delayed_job do
+    
+    desc "Starts the Delayed Job Daemon(s)."
+    task :start do
+      puts "\n\n=== Starting #{(ENV['n'] + ' ') if ENV['n']}Delayed Job Daemon(s)! ===\n\n"
+      run "RAILS_ENV=production #{current_path}/script/delayed_job #{"-n #{ENV['n']} " if ENV['n']}start"
+    end
+    
+    desc "Stops the Delayed Job Daemon(s)."
+    task :stop do
+      puts "\n\n=== Stopping Delayed Job Daemon(s)! ===\n\n"
+      run "RAILS_ENV=production #{current_path}/script/delayed_job stop"
+    end
+    
+  end
+  
   namespace :apache do
     
     desc "Adds Apache2 configuration and enables it."
@@ -367,9 +388,24 @@ namespace :deploy do
     end
 
   end
+  
+  desc "Run a command on the remote server. Specify command='my_command'."
+  task :run_command do
+    run "cd #{current_path}; #{ENV['command']}"
+  end
+  
+  # Tasks that run after the (cap deploy:setup)
+  
+  desc "Sets up the shared path"
+  task :setup_shared_path do
+    puts "\n\n=== Setting up the shared path! ===\n\n"
+    directory_configuration.each do |directory|
+      run "mkdir -p #{shared_path}/#{directory}"
+    end
+    system "cap deploy:db:sync_yaml"
+  end
  
 end
- 
  
 # Callbacks
 

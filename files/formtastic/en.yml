@@ -1,0 +1,13 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See http://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+# See http://guides.rubyonrails.org/i18n.html for a list of I18N options
+
+en:
+  activerecord:
+    errors:
+      models:
+        post:
+          attributes:
+            name:
+              blank: "Must fill in a name for the post!"

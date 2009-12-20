@@ -1,18 +1,24 @@
 en:
   formtastic:
-	titles:
-	  post_details: "Post details"
-	labels:
-	  post:
-		title: "Choose a title..."
-		body: "Write something..."
-		edit:
-		  title: "Edit title"
-	hints:
-	  post:
-		title: "Choose a good title for you post."
-		body: "Write something inspiring here."
-	actions:
-	  create: "Create my {{model}}"
-	  update: "Save changes"
-	  dummie: "Launch!"
+    titles:
+      register: Register
+    labels:
+      user:
+        username: Choose a username
+        email: Enter your email address
+        password: Enter your password
+        password_confirmation: Re-enter your password
+        edit:
+          username: Change your username
+    hints:
+      user:
+        username: Please fill in your username. The username may only contain alphanumeric characters
+        email: Please fill in a valid email address.
+    actions:
+      user:
+        create: Sign up!
+        update: Update info
+      
+      create: "Create my {{model}}"
+      update: "Save changes"
+      destroy: "Destroy my {{model}}"
