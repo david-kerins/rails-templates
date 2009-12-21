@@ -91,10 +91,6 @@ if yes? "Would you like to use Authlogic and CanCan for Authentication and Autho
   modules << :cancan
 end
 
-if yes? "Would you like to use Delayed Job?"
-  modules << :delayed_job
-end
-
 
 # == Installation Start ==============================
 
@@ -125,6 +121,7 @@ load_module "whenever"
 load_module "action_mailer_optional_tls"
 load_module "paperclip"
 load_module "friendly_id"
+load_module "delayed_job"
 modules.each do |m|
   load_module(m.to_s)
 end
