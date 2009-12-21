@@ -1,3 +1,5 @@
+ensure_gem_installed("daemons")
+
 gem 'collectiveidea-delayed_job',
   :lib => 'delayed_job',
   :source => 'http://gems.github.com'
