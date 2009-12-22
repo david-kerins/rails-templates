@@ -64,7 +64,7 @@ end
 inject_file("app/models/user.rb", /class User < ActiveRecord::Base/) do |match|
   "#{match}\n\n\tacts_as_authentic do |c|\n\t\tc.validate_login_field(false)\n\tend\n\n" +
   "\tdef self.find_by_username_or_email(login)\n\t\tfind_by_username(login) || find_by_email(login)\n\tend\n\n" + 
-  "\tvalidates_length_of :username, :within => 3..30\n\tvalidates_format_of :username, :with => /^[\w\d_]+$/"
+  "\tvalidates_length_of :username, :within => 3..30\n\tvalidates_format_of :username, :with => /^[\\w\\d_]+$/"
 end
 
 inject_file("app/models/user_session.rb", /class UserSession < Authlogic::Session::Base/) do |match|
