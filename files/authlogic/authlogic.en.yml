@@ -1,19 +1,19 @@
 en:
   authlogic:
     error_messages:
-      login_blank: can not be blank
-      login_not_found: is not valid
-      login_invalid: should use only letters, numbers, spaces, and .-_@ please.
+      login_blank: Please provide a username or email address.
+      login_not_found: Invalid username or email address. It does not exist.
+      login_invalid: Username / Email can only contain letters, numbers, spaces, and .-_@. 
       consecutive_failed_logins_limit_exceeded: Consecutive failed logins limit exceeded, account is disabled.
-      email_invalid: should look like an email address.
-      password_blank: can not be blank
-      password_invalid: is not valid
-      not_active: Your account is not active
-      not_confirmed: Your account is not confirmed
-      not_approved: Your account is not approved
+      email_invalid: This email address appears to be invalid.
+      password_blank: Please provide a password.
+      password_invalid: Incorrect password.
+      not_active: Your account is not active.
+      not_confirmed: Your account is not confirmed.
+      not_approved: Your account is not approved.
       no_authentication_details: You did not provide any details for authentication.
     models:
-      user_session: UserSession (or whatever name you are using)
+      user_session: UserSession
     attributes:
       user_session:
         login: login

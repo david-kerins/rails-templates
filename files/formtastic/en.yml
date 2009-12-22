@@ -7,7 +7,16 @@ en:
   activerecord:
     errors:
       models:
-        post:
+        user:
           attributes:
-            name:
-              blank: "Must fill in a name for the post!"
+            username:
+              too_short: Username must be between 3 and 30 characters.
+              too_long: Username must be between 3 and 30 characters.
+              invalid: Can only contain letters, numbers and underscores.
+            email:
+              too_short: Email must be at least 6 characters of length.
+            password:
+              too_short: Password is too short, it must contain at least 4 characters.
+              confirmation: Password doesn't match that of the Password Confirmation field.
+            password_confirmation:
+              too_short: Password is too short, it must contain at least 4 characters.

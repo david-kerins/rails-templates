@@ -10,14 +10,23 @@ en:
         password_confirmation: Re-enter your password
         edit:
           username: Change your username
+      user_session:
+        username: Username or Email
+        password: Password
+        remember_me: Remember me
     hints:
       user:
         username: Please fill in your username. The username may only contain alphanumeric characters
         email: Please fill in a valid email address.
+      user_session:
+        username: Fill in your username or email address to log in.
+        password: Fill in your password.
     actions:
       user:
         create: Sign up!
         update: Update info
+      user_session:
+        create: Sign in!
       
       create: "Create my {{model}}"
       update: "Save changes"

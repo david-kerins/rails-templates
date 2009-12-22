@@ -60,10 +60,20 @@ inject_file("app/models/user.rb", /attr_accessible :username, :email/) do |match
   "attr_accessible :username, :email, :password, :password_confirmation"
 end
 
-# Inject into Users Model
+# Inject into User Model
 inject_file("app/models/user.rb", /class User < ActiveRecord::Base/) do |match|
-  "#{match}\n\n\tacts_as_authentic do |c|\n\tend\n"
+  "#{match}\n\n\tacts_as_authentic do |c|\n\t\tc.validate_login_field(false)\n\tend\n\n" +
+  "\tdef self.find_by_username_or_email(login)\n
+     \t\tfind_by_username(login) || find_by_email(login)\n
+  \tend\n\n
+   \tvalidates_length_of :username, :within => 3..30\n
+   \tvalidates_format_of :username, :with => /^[\w\d_]+$/"
 end
+
+inject_file("app/models/user_session.rb", /class UserSession < Authlogic::Session::Base/) do |match|
+  "#{match}\n\n\tfind_by_login_method :find_by_username_or_email\n"
+end
+
 
 # Add Routes
 route "map.resource :user_session, :collection => {:destroy => :get}"
