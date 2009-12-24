@@ -46,18 +46,27 @@ inject_file("app/controllers/application_controller.rb", /# filter_parameter_log
 end
 
 inject_file("app/controllers/application_controller.rb", /helper :all/) do |match|
-  "#{match}\n\thelper_method :current_user_session, :current_user" +
-  "\n\tinclude Authlogic::Custom::Helpers\n\n"
+<<-FILE
+#{match}
+  helper_method :current_user_session, :current_user
+  include Authlogic::Custom::Helpers
+FILE
 end
 
 # Inject into Users Controller
 inject_file("app/controllers/users_controller.rb", /class UsersController < ApplicationController/) do |match|
-  "#{match}\n\t# before_filter :require_no_user, :only => [:new, :create]" +
-  "\n\t# before_filter :require_user, :only => [:show, :edit, :update]\n"
+<<-FILE
+#{match}
+  # before_filter :require_no_user, :only => [:new, :create]
+  # before_filter :require_user, :only => [:show, :edit, :update]
+FILE
 end
 
 inject_file("app/controllers/users_controller.rb", /class UsersController < ApplicationController/) do |match|
-  "#{match}\n\n\t# load_and_authorize_resource\n"
+<<-FILE
+#{match}
+  # load_and_authorize_resource
+FILE
 end
 
 inject_file("app/models/user.rb", /attr_accessible :username, :role/) do |match|
@@ -66,27 +75,51 @@ end
 
 # Inject into User Model
 inject_file("app/models/user.rb", /class User < ActiveRecord::Base/) do |match|
-  "#{match}\n\n\tacts_as_authentic do |c|\n\t\tc.validate_login_field(false)\n\tend\n\n" +
-  "\tdef self.find_by_username_or_email(login)\n\t\tfind_by_username(login) || find_by_email(login)\n\tend\n\n" + 
-  "\tvalidates_length_of :username, :within => 3..30\n\tvalidates_format_of :username, :with => /^[\\w\\d_]+$/"
+<<-FILE
+#{match}
+  
+  acts_as_authentic do |c|
+    c.validate_login_field(false)
+  end
+  
+  def self.find_by_username_or_email(login)
+    find_by_username(login) || find_by_email(login)
+  end
+  
+  validates_length_of :username, :within => 3..30
+  validates_format_of :username, :with => /^[\\w\\d_]+$/
+FILE
 end
 
 inject_file("app/models/user_session.rb", /class UserSession < Authlogic::Session::Base/) do |match|
-  "#{match}\n\n\tfind_by_login_method :find_by_username_or_email\n"
+<<-FILE
+#{match}
+  find_by_login_method :find_by_username_or_email
+FILE
+end
+
+inject_file("config/routes.rb", /map\.resources :users/) do |match|
+<<-FILE
+#{match}
+  map.root :users
+FILE
 end
 
 
 # Add Routes
 route "map.resource :user_session,
-  :collection => {:destroy => :get}"
+    :collection => {:destroy => :get}"
+
 route "map.sign_up 'sign-up',
-  :controller => :users,
-  :action     => :new"
+    :controller => :users,
+    :action     => :new"
+
 route "map.logout 'logout',
-  :controller => :user_sessions,
-  :action     => :destroy"
+    :controller => :user_sessions,
+    :action     => :destroy"
+
 route "map.login 'login',
-  :controller => :user_sessions,
-  :action     => :new"
+    :controller => :user_sessions,
+    :action     => :new"
 
 commit "Added Authlogic Gem Dependency. Scaffolded a User model. Generated a User Session controller. Injected the AuthLogic class method inside the user model."

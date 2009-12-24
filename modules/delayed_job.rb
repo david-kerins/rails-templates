@@ -8,13 +8,14 @@ rake "gems:install",
   :sudo => true
 
 open('Rakefile', 'a') do |file|
-  file << <<-CONFIG
+file << <<-FILE
+
 begin
   require 'delayed/tasks'
 rescue LoadError
   STDERR.puts "Run `rake gems:install` to install delayed_job"
 end
-  CONFIG
+  FILE
 end
 
 generate('delayed_job')
