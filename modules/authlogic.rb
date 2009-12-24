@@ -9,7 +9,7 @@ rake "gems:install",
 generate "session user_session"
 
 # Creates an initial scaffold for users
-generate "nifty_scaffold user username:string email:string --haml"
+generate "nifty_scaffold user username:string role:string --haml"
 
 
 # Downloads Files
@@ -54,6 +54,10 @@ end
 inject_file("app/controllers/users_controller.rb", /class UsersController < ApplicationController/) do |match|
   "#{match}\n\tbefore_filter :require_no_user, :only => [:new, :create]" +
   "\n\tbefore_filter :require_user, :only => [:show, :edit, :update]\n"
+end
+
+inject_file("app/controllers/users_controller.rb", /class UsersController < ApplicationController/) do |match|
+  "#{match}\n\n\t# load_and_authorize_resource\n"
 end
 
 inject_file("app/models/user.rb", /attr_accessible :username, :email/) do |match|
