@@ -52,15 +52,15 @@ end
 
 # Inject into Users Controller
 inject_file("app/controllers/users_controller.rb", /class UsersController < ApplicationController/) do |match|
-  "#{match}\n\tbefore_filter :require_no_user, :only => [:new, :create]" +
-  "\n\tbefore_filter :require_user, :only => [:show, :edit, :update]\n"
+  "#{match}\n\t# before_filter :require_no_user, :only => [:new, :create]" +
+  "\n\t# before_filter :require_user, :only => [:show, :edit, :update]\n"
 end
 
 inject_file("app/controllers/users_controller.rb", /class UsersController < ApplicationController/) do |match|
   "#{match}\n\n\t# load_and_authorize_resource\n"
 end
 
-inject_file("app/models/user.rb", /attr_accessible :username, :email/) do |match|
+inject_file("app/models/user.rb", /attr_accessible :username, :role/) do |match|
   "attr_accessible :username, :email, :password, :password_confirmation"
 end
 
@@ -77,7 +77,16 @@ end
 
 
 # Add Routes
-route "map.resource :user_session, :collection => {:destroy => :get}"
-
+route "map.resource :user_session,
+  :collection => {:destroy => :get}"
+route "map.sign_up 'sign-up',
+  :controller => :users,
+  :action     => :new"
+route "map.logout 'logout',
+  :controller => :user_sessions,
+  :action     => :destroy"
+route "map.login 'login',
+  :controller => :user_sessions,
+  :action     => :new"
 
 commit "Added Authlogic Gem Dependency. Scaffolded a User model. Generated a User Session controller. Injected the AuthLogic class method inside the user model."
