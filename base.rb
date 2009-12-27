@@ -126,8 +126,5 @@ modules.each do |m|
   load_module(m.to_s)
 end
 
-# Create and Migrate Database
-rake "db:create"
-rake "db:migrate"
-
 p "Rails Application Installed!"
+p "Create and Migrate the database after applying any optional changes."
