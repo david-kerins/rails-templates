@@ -9,7 +9,10 @@ end
 
 # Injects the include ExceptionNotifiable module into the ApplicationController
 inject_file('app/controllers/application_controller.rb', /class ApplicationController < ActionController::Base/) do |match|
-  "#{match}\n\tinclude ExceptionNotifiable"
+<<-FILE
+#{match}
+  include ExceptionNotifiable
+FILE
 end
 
 commit "Installed Exception Notifier Plugin and added the exception_recipients to the environment.rb file."

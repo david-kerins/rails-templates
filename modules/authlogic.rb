@@ -45,7 +45,7 @@ inject_file("app/controllers/application_controller.rb", /# filter_parameter_log
   "filter_parameter_logging :password, :password_confirmation"
 end
 
-inject_file("app/controllers/application_controller.rb", /helper :all/) do |match|
+inject_file("app/controllers/application_controller.rb", /class ApplicationController < ActionController::Base/) do |match|
 <<-FILE
 #{match}
   helper_method :current_user_session, :current_user
@@ -70,8 +70,16 @@ FILE
 end
 
 inject_file("app/models/user.rb", /attr_accessible :username, :role/) do |match|
-  "attr_accessible :username, :email, :password, :password_confirmation"
+  ""
 end
+
+inject_file("app/models/user.rb", /class User < ActiveRecord::Base/) do |match|
+<<-FILE
+#{match}
+  attr_accessible :username, :email, :password, :password_confirmation
+FILE
+end
+
 
 # Inject into User Model
 inject_file("app/models/user.rb", /class User < ActiveRecord::Base/) do |match|
