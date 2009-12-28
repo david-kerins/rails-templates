@@ -48,7 +48,7 @@
 #   - Does a commit for every installed module
 
 
-# == Helper Methods ==============================
+# == Helper Methods ============================== 
 
 # Methods for storing modules that are requested
 def modules
