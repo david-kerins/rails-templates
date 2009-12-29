@@ -102,14 +102,14 @@ run "rm -f public/images/*"
 run "sudo gem update --system"
 run "sudo gem update"
 
-# Load default modules
+# Load required modules
 load_module "git"
-load_module "hirb"
 load_module "rspec"
 load_module "haml"
 load_module "nifty_generators"
 load_module "formtastic"
-load_module "exception_notifier"
+
+# Load additional modules
 load_module "jrails"
 load_module "validatious_on_rails"
 load_module "rails_xss"
@@ -121,6 +121,10 @@ load_module "action_mailer_optional_tls"
 load_module "paperclip"
 load_module "friendly_id"
 load_module "delayed_job"
+load_module "hirb"
+load_module "exception_notifier"
+
+# Load optional modules
 modules.each do |m|
   load_module(m.to_s)
 end
