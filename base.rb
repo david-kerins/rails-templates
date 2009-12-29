@@ -29,10 +29,6 @@
 #   OTHER GENERATES
 #   - Nifty Layout (hamalized)
 #   - Capistrano Template (After initializing Capistrano with the capify command)
-# 
-#   DATABASE
-#   - Creates
-#   - Migrates
 #
 #   FILES
 #   - Removes the README
@@ -73,9 +69,12 @@ def commit(m)
 end
 
 # Ensures the specified gem is installed
-def ensure_gem_installed(gem)
-  run "sudo gem install #{gem}" unless Gem.available? gem
+def ensure_gem_installed(g)
+  unless Gem.available? g
+    run "sudo gem install #{g}"
+  end
 end
+
 
 # Inserts text into a file
 def inject_file(path, regexp, *args, &block)
@@ -99,7 +98,7 @@ run "rm README"
 run "rm public/index.html"
 run "rm -f public/images/*"
 
-# Update Install Gems
+# Update Installed Gems
 run "sudo gem update --system"
 run "sudo gem update"
 
