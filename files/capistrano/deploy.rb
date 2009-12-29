@@ -181,7 +181,7 @@ namespace :deploy do
   task :setup_symlinks do
     puts "\n\n=== Setting up Symbolic Links! ===\n\n"
     symlink_configuration.each do |config|
-      run "ln -nfs #{File.join(shared_path, config[0])} #{File.join(release_path, config[1])}"
+      run "ln -nfs #{File.join(shared_path, config[0])} #{File.join(current_path, config[1])}"
     end
   end
   
