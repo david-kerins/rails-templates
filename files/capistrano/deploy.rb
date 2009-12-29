@@ -203,14 +203,28 @@ namespace :deploy do
     task :create do
       puts "\n\n=== Creating the Production Database! ===\n\n"
       run "cd #{current_path}; rake db:create RAILS_ENV=production"
-      run "chown -R www-data:www-data #{deploy_to}"
+      system "cap deploy:set_permissions"
     end
   
     desc "Migrate Production Database"
     task :migrate do
       puts "\n\n=== Migrating the Production Database! ===\n\n"
       run "cd #{current_path}; rake db:migrate RAILS_ENV=production"
-      run "chown -R www-data:www-data #{deploy_to}"
+      system "cap deploy:set_permissions"
+    end
+
+    desc "Resets the Production Database"
+    task :migrate_reset do
+      puts "\n\n=== Resetting the Production Database! ===\n\n"
+      run "cd #{current_path}; rake db:migrate:reset RAILS_ENV=production"
+    end
+
+    desc "Moves the SQLite3 Production Database to the shared path"
+    task :move_to_shared do
+      puts "\n\n=== Moving the SQLite3 Production Database to the shared path! ===\n\n"
+      run "mv #{current_path}/db/production.sqlite3 #{shared_path}/db/production.sqlite3"
+      system "cap deploy:setup_symlinks"
+      system "cap deploy:set_permissions"
     end
   
   end

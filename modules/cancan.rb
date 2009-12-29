@@ -19,6 +19,8 @@ end
 inject_file("app/controllers/application_controller.rb", /class ApplicationController < ActionController::Base/) do |match|
 <<-FILE
 #{match}
+  # This will rescue the CanCan::AccessDenied exception
+  # You can use this to for example redirect a user and add an error message 
   rescue_from CanCan::AccessDenied do |exception|
     flash[:error] = "You are not authorized to access this area."
     redirect_to(root_url)
