@@ -218,6 +218,13 @@ namespace :deploy do
       puts "\n\n=== Resetting the Production Database! ===\n\n"
       run "cd #{current_path}; rake db:migrate:reset RAILS_ENV=production"
     end
+    
+    desc "Destroys Production Database"
+    task :drop do
+      puts "\n\n=== Destroying the Production Database! ===\n\n"
+      run "cd #{current_path}; rake db:drop RAILS_ENV=production"
+      system "cap deploy:set_permissions"
+    end
 
     desc "Moves the SQLite3 Production Database to the shared path"
     task :move_to_shared do
@@ -225,6 +232,12 @@ namespace :deploy do
       run "mv #{current_path}/db/production.sqlite3 #{shared_path}/db/production.sqlite3"
       system "cap deploy:setup_symlinks"
       system "cap deploy:set_permissions"
+    end
+  
+    desc "Populates the Production Database"
+    task :seed do
+      puts "\n\n=== Populating the Production Database! ===\n\n"
+      run "cd #{current_path}; rake db:seed RAILS_ENV=production"
     end
   
   end
