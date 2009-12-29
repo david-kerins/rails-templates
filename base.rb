@@ -98,7 +98,7 @@ run "rm README"
 run "rm public/index.html"
 run "rm -f public/images/*"
 
-# Update Installed Gems
+# Update installed gems
 run "sudo gem update --system"
 run "sudo gem update"
 

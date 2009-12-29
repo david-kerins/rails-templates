@@ -76,6 +76,7 @@ end
 inject_file("app/models/user.rb", /class User < ActiveRecord::Base/) do |match|
 <<-FILE
 #{match}
+  # Remove the :username attribute to ensure users cannot change their username at a later time
   attr_accessible :username, :email, :password, :password_confirmation
 FILE
 end
@@ -90,6 +91,7 @@ inject_file("app/models/user.rb", /class User < ActiveRecord::Base/) do |match|
     c.validate_login_field(false)
   end
   
+  # Allows users to sign in using both their username and email address
   def self.find_by_username_or_email(login)
     find_by_username(login) || find_by_email(login)
   end
@@ -102,6 +104,7 @@ end
 inject_file("app/models/user_session.rb", /class UserSession < Authlogic::Session::Base/) do |match|
 <<-FILE
 #{match}
+  # Allows users to sign in using both their username and email address
   find_by_login_method :find_by_username_or_email
 FILE
 end
