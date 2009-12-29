@@ -16,4 +16,14 @@ inside('lib/cancan') do
   end
 end
 
+inject_file("app/controllers/application_controller.rb", /class ApplicationController < ActionController::Base/) do |match|
+<<-FILE
+#{match}
+  rescue_from CanCan::AccessDenied do |exception|
+    flash[:error] = "You are not authorized to access this area."
+    redirect_to(root_url)
+  end
+FILE
+end
+
 commit "Added CanCan Gem Dependency. Added the Ability file."
