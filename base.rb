@@ -97,6 +97,7 @@ end
 run "rm README"
 run "rm public/index.html"
 run "rm -f public/images/*"
+run "cp config/database.yml config/database.yml.example"
 
 # Update installed gems
 run "sudo gem update --system"
